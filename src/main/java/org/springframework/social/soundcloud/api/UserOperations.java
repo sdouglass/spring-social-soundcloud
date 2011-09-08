@@ -9,7 +9,6 @@ import java.util.List;
 public interface UserOperations {
 
 	public SoundCloudProfile getUserProfile();
-	public void updateUserProfile(SoundCloudProfile profile);
 	public List<Track> getFavorites();
 	public List<Track> getTracks();
 

@@ -21,19 +21,11 @@ public abstract class AbstractUserTemplate extends AbstractSoundCloudResourceOpe
 		return getApiBaseUrl() + getUsersResourcePrefix();
 	}
 	
-	
 	@Override
 	public void favoriteTrack(long trackId) {
 		restTemplate.put(getApiResourceUrl("/favorites/" + trackId),null);
 
 	}
-	
-
-	@Override
-	public void updateUserProfile(SoundCloudProfile profile) {
-			restTemplate.put(getApiResourceUrl(""), profile);
-	}
-		
 	
 	@Override 
 	public SoundCloudProfile getUserProfile() {
