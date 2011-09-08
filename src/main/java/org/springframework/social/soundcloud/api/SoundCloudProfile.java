@@ -1,7 +1,6 @@
 package org.springframework.social.soundcloud.api;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
 * Model class containing a SoundCloud user's profile information.

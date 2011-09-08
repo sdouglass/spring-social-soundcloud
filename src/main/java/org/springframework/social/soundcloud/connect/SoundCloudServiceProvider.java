@@ -4,6 +4,10 @@ import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 import org.springframework.social.soundcloud.api.SoundCloud;
 import org.springframework.social.soundcloud.api.impl.SoundCloudTemplate;
 
+/**
+* SoundCloud ServiceProvider implementation.
+* @author Michael Lavelle
+*/
 public class SoundCloudServiceProvider extends AbstractOAuth2ServiceProvider<SoundCloud>{
 
 

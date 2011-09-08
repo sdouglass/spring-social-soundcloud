@@ -16,14 +16,14 @@ public class SoundCloudAdapter implements ApiAdapter<SoundCloud> {
 
 	@Override
 	public UserProfile fetchUserProfile(SoundCloud soundCloud) {
-		SoundCloudProfile profile = soundCloud.userOperations().getUserProfile();
+		SoundCloudProfile profile = soundCloud.meOperations().getUserProfile();
 		return new UserProfileBuilder().setName(profile.getFullName()).setUsername(profile.getUsername()).build();
 
 	}
 
 	@Override
 	public void setConnectionValues(SoundCloud soundCloud, ConnectionValues values) {
-		SoundCloudProfile profile = soundCloud.userOperations().getUserProfile();
+		SoundCloudProfile profile = soundCloud.meOperations().getUserProfile();
 		values.setProviderUserId(profile.getId());
 		values.setDisplayName(profile.getFullName());
 		values.setProfileUrl(profile.getPermalinkUrl());
@@ -35,7 +35,7 @@ public class SoundCloudAdapter implements ApiAdapter<SoundCloud> {
 	@Override
 	public boolean test(SoundCloud soundCloud) {
 		try {
-			soundCloud.userOperations().getUserProfile();
+			soundCloud.meOperations().getUserProfile();
 			return true;
 			} catch (ApiException e) {
 			return false;

@@ -2,10 +2,6 @@ package org.springframework.social.soundcloud.api.impl.json;
 
 
 
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;

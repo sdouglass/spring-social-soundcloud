@@ -6,9 +6,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.social.NotAuthorizedException;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
+import org.springframework.social.oauth2.OAuth2Version;
+import org.springframework.social.soundcloud.api.MeOperations;
+import org.springframework.social.soundcloud.api.ResolveOperations;
 import org.springframework.social.soundcloud.api.SoundCloud;
-import org.springframework.social.soundcloud.api.UserOperations;
+import org.springframework.social.soundcloud.api.UsersOperations;
 import org.springframework.social.soundcloud.api.impl.json.SoundCloudModule;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.web.client.RestTemplate;
@@ -16,9 +20,22 @@ import org.springframework.web.client.RestTemplate;
 public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 		SoundCloud {
 
-	private UserOperations userOperations;
+	private MeOperations meOperations;
+	private UsersOperations usersOperations;
+	private ResolveOperations resolveOperations;
+
+ 
+
 
 	private ObjectMapper objectMapper;
+	
+	
+	
+	@Override
+	protected OAuth2Version getOAuth2Version() {
+		return OAuth2Version.DRAFT_10;
+	}
+
 
 	/**
 	 * Create a new instance of SoundCloudTemplate. This constructor creates a
@@ -34,16 +51,15 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	}
 
 	/**
-	 * Create a new instance of FacebookTemplate. This constructor creates the
-	 * FacebookTemplate using a given access token.
+	 * Create a new instance of SoundCloudTemplate. This constructor creates the
+	 * SoundCloudTemplate using a given access token.
 	 * 
 	 * @param accessToken
-	 *            An access token given by Facebook after a successful OAuth 2
+	 *            An access token given by SoundCloud after a successful OAuth 2
 	 *            authentication (or through Facebook's JS library).
 	 */
 	public SoundCloudTemplate(String accessToken) {
 		super(accessToken);
-		System.out.println("MY ACCESS TOKEN IS:" + accessToken);
 		initialize(accessToken);
 	}
 	
@@ -56,12 +72,16 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	}
 
 	@Override
-	public UserOperations userOperations() {
-		return userOperations;
+	public MeOperations meOperations() {
+		return meOperations;
 	}
 
 	private void initSubApis(String accessToken) {
-		userOperations = new UserTemplate(getRestTemplate(),accessToken,isAuthorized());
+		usersOperations = new UsersTemplate(getRestTemplate(),isAuthorized());
+		meOperations = new MeTemplate(getRestTemplate(),isAuthorized());
+		resolveOperations = new ResolveTemplate(getRestTemplate(),isAuthorized());
+
+
 
 	}
 
@@ -71,10 +91,19 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 		getRestTemplate().setErrorHandler(new SoundCloudErrorHandler());
 		// Wrap the request factory with a BufferingClientHttpRequestFactory so
 		// that the error handler can do repeat reads on the response.getBody()
+		
 		super.setRequestFactory(ClientHttpRequestFactorySelector
 				.bufferRequests(getRestTemplate().getRequestFactory()));
 		initSubApis(accessToken);
+	
+		
+	
+	
 	}
+	
+	
+	
+	
 
 	private void registerSoundCloudJsonModule(RestTemplate restTemplate2) {
 		objectMapper = new ObjectMapper();
@@ -87,6 +116,16 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 				jsonConverter.setObjectMapper(objectMapper);
 			}
 		}
+	}
+ 
+	@Override
+	public UsersOperations usersOperations() {
+		return usersOperations;
+	}
+	
+	@Override
+	public ResolveOperations resolveOperations() {
+		return resolveOperations;
 	}
 
 }

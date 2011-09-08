@@ -4,6 +4,7 @@ package org.springframework.social.soundcloud.api.impl.json;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.springframework.social.soundcloud.api.SoundCloudProfile;
+import org.springframework.social.soundcloud.api.Track;
 
 
 /**
@@ -20,6 +21,8 @@ public class SoundCloudModule extends SimpleModule {
 	@Override
 	public void setupModule(SetupContext context) {
 		context.setMixInAnnotations(SoundCloudProfile.class, SoundCloudProfileMixin.class);
+		context.setMixInAnnotations(Track.class, TrackMixin.class);
+
 		
 	}
 }

@@ -1,15 +1,16 @@
 package org.springframework.social.soundcloud.connect;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.social.soundcloud.api.MeOperations;
 import org.springframework.social.soundcloud.api.SoundCloud;
 import org.springframework.social.soundcloud.api.SoundCloudProfile;
-import org.springframework.social.soundcloud.api.UserOperations;
 
 
 public class SoundCloudAdapterTest {
@@ -20,8 +21,8 @@ public class SoundCloudAdapterTest {
 	
 	@Test
 	public void fetchProfileForFirstNameLastName() {		
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(soundCloud.userOperations()).thenReturn(userOperations);
+		MeOperations userOperations = Mockito.mock(MeOperations.class);
+		Mockito.when(soundCloud.meOperations()).thenReturn(userOperations);
 		Mockito.when(userOperations.getUserProfile()).thenReturn(new SoundCloudProfile("12345678", "michaellavelle", "http://a1.sndcdn.com/images/default_avatar_large.png?8460df1","http://soundcloud.com/michaellavelle","Michael Lavelle","https://api.soundcloud.com/users/7031365","London"));
 		UserProfile profile = apiAdapter.fetchUserProfile(soundCloud);
 		assertEquals("Michael Lavelle", profile.getName());
@@ -33,8 +34,8 @@ public class SoundCloudAdapterTest {
 
 	@Test
 	public void fetchProfileForOnlyFirstName() {		
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(soundCloud.userOperations()).thenReturn(userOperations);
+		MeOperations userOperations = Mockito.mock(MeOperations.class);
+		Mockito.when(soundCloud.meOperations()).thenReturn(userOperations);
 		Mockito.when(userOperations.getUserProfile()).thenReturn(new SoundCloudProfile("01248", "mattslip", "http://a1.sndcdn.com/images/default_avatar_large.png?8460df1","http://soundcloud.com/mattslip","mattslip","https://api.soundcloud.com/users/3510549","London"));
 		UserProfile profile = apiAdapter.fetchUserProfile(soundCloud);
 		assertEquals("mattslip", profile.getName());
@@ -47,9 +48,9 @@ public class SoundCloudAdapterTest {
 	
 	@Test
 	public void setConnectionValues() {		
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(soundCloud.userOperations()).thenReturn(userOperations);
-		Mockito.when(userOperations.getUserProfile()).thenReturn(new SoundCloudProfile("12345678", "michaellavelle", "http://a1.sndcdn.com/images/default_avatar_large.png?8460df1","http://soundcloud.com/michaellavelle","Michael Lavelle","https://api.soundcloud.com/users/7031365","London"));
+		MeOperations meOperations = Mockito.mock(MeOperations.class);
+		Mockito.when(soundCloud.meOperations()).thenReturn(meOperations);
+		Mockito.when(meOperations.getUserProfile()).thenReturn(new SoundCloudProfile("12345678", "michaellavelle", "http://a1.sndcdn.com/images/default_avatar_large.png?8460df1","http://soundcloud.com/michaellavelle","Michael Lavelle","https://api.soundcloud.com/users/7031365","London"));
 		TestConnectionValues connectionValues = new TestConnectionValues();
 		apiAdapter.setConnectionValues(soundCloud, connectionValues);
 		assertEquals("Michael Lavelle", connectionValues.getDisplayName());
