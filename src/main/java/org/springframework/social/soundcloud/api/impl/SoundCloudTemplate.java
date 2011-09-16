@@ -56,7 +56,7 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	 * 
 	 * @param accessToken
 	 *            An access token given by SoundCloud after a successful OAuth 2
-	 *            authentication (or through Facebook's JS library).
+	 *            authentication
 	 */
 	public SoundCloudTemplate(String accessToken) {
 		super(accessToken);
