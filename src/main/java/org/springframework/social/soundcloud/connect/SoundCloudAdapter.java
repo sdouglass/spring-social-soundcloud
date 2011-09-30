@@ -25,7 +25,7 @@ public class SoundCloudAdapter implements ApiAdapter<SoundCloud> {
 	public void setConnectionValues(SoundCloud soundCloud, ConnectionValues values) {
 		SoundCloudProfile profile = soundCloud.meOperations().getUserProfile();
 		values.setProviderUserId(profile.getId());
-		values.setDisplayName(profile.getFullName());
+		values.setDisplayName(profile.getUsername());
 		values.setProfileUrl(profile.getPermalinkUrl());
 		values.setImageUrl(profile.getAvatarUrl());
 	}

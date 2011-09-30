@@ -11,6 +11,7 @@ import org.springframework.social.connect.UserProfile;
 import org.springframework.social.soundcloud.api.MeOperations;
 import org.springframework.social.soundcloud.api.SoundCloud;
 import org.springframework.social.soundcloud.api.SoundCloudProfile;
+import org.springframework.social.soundcloud.connect.SoundCloudAdapter;
 
 
 public class SoundCloudAdapterTest {
@@ -53,7 +54,7 @@ public class SoundCloudAdapterTest {
 		Mockito.when(meOperations.getUserProfile()).thenReturn(new SoundCloudProfile("12345678", "michaellavelle", "http://a1.sndcdn.com/images/default_avatar_large.png?8460df1","http://soundcloud.com/michaellavelle","Michael Lavelle","https://api.soundcloud.com/users/7031365","London"));
 		TestConnectionValues connectionValues = new TestConnectionValues();
 		apiAdapter.setConnectionValues(soundCloud, connectionValues);
-		assertEquals("Michael Lavelle", connectionValues.getDisplayName());
+		assertEquals("michaellavelle", connectionValues.getDisplayName());
 		assertEquals("http://a1.sndcdn.com/images/default_avatar_large.png?8460df1", connectionValues.getImageUrl());
 		assertEquals("http://soundcloud.com/michaellavelle", connectionValues.getProfileUrl());
 		assertEquals("12345678", connectionValues.getProviderUserId());
