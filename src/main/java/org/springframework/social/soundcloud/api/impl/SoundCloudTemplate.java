@@ -12,6 +12,7 @@ import org.springframework.social.oauth2.OAuth2Version;
 import org.springframework.social.soundcloud.api.MeOperations;
 import org.springframework.social.soundcloud.api.ResolveOperations;
 import org.springframework.social.soundcloud.api.SoundCloud;
+import org.springframework.social.soundcloud.api.TracksOperations;
 import org.springframework.social.soundcloud.api.UsersOperations;
 import org.springframework.social.soundcloud.api.impl.json.SoundCloudModule;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
@@ -23,7 +24,7 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	private MeOperations meOperations;
 	private UsersOperations usersOperations;
 	private ResolveOperations resolveOperations;
-
+	private TracksOperations tracksOperations;
  
 
 
@@ -46,8 +47,8 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	 * constructor will support those operations. Those operations requiring
 	 * authentication will throw {@link NotAuthorizedException}.
 	 */
-	public SoundCloudTemplate() {
-		initialize(null);
+	public SoundCloudTemplate(String clientId) {
+		initialize(clientId,null);
 	}
 
 	/**
@@ -58,9 +59,9 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	 *            An access token given by SoundCloud after a successful OAuth 2
 	 *            authentication
 	 */
-	public SoundCloudTemplate(String accessToken) {
+	public SoundCloudTemplate(String clientId,String accessToken) {
 		super(accessToken);
-		initialize(accessToken);
+		initialize(clientId,accessToken);
 	}
 	
 	
@@ -76,17 +77,18 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 		return meOperations;
 	}
 
-	private void initSubApis(String accessToken) {
-		usersOperations = new UsersTemplate(getRestTemplate(),isAuthorized());
+	private void initSubApis(String clientId,String accessToken) {
+		usersOperations = new UsersTemplate(clientId,getRestTemplate(),isAuthorized());
 		meOperations = new MeTemplate(getRestTemplate(),isAuthorized());
-		resolveOperations = new ResolveTemplate(getRestTemplate(),isAuthorized());
+		resolveOperations = new ResolveTemplate(clientId,getRestTemplate(),isAuthorized());
+		tracksOperations = new TracksTemplate(clientId,getRestTemplate(),isAuthorized());
 
 
 
 	}
 
 	// private helpers
-	private void initialize(String accessToken) {
+	private void initialize(String clientId,String accessToken) {
 		registerSoundCloudJsonModule(getRestTemplate());
 		getRestTemplate().setErrorHandler(new SoundCloudErrorHandler());
 		// Wrap the request factory with a BufferingClientHttpRequestFactory so
@@ -94,7 +96,7 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 		
 		super.setRequestFactory(ClientHttpRequestFactorySelector
 				.bufferRequests(getRestTemplate().getRequestFactory()));
-		initSubApis(accessToken);
+		initSubApis(clientId,accessToken);
 	
 		
 	
@@ -127,5 +129,12 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	public ResolveOperations resolveOperations() {
 		return resolveOperations;
 	}
+	
+
+	@Override
+	public TracksOperations tracksOperations() {
+		return tracksOperations;
+	}
+
 
 }

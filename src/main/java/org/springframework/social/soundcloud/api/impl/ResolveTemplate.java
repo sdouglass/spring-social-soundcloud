@@ -12,9 +12,9 @@ public class ResolveTemplate extends AbstractSoundCloudResourceOperations implem
 
 	
 	
-	public ResolveTemplate(RestTemplate restTemplate,
+	public ResolveTemplate(String clientId,RestTemplate restTemplate,
 			boolean isAuthorizedForUser) {
-		super(restTemplate, isAuthorizedForUser);
+		super(clientId,restTemplate, isAuthorizedForUser,true);
 	}
 	
 	protected String getResolvableResourceBaseUrl()

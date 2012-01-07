@@ -10,7 +10,7 @@ import org.springframework.social.soundcloud.api.impl.SoundCloudTemplate;
 */
 public class SoundCloudServiceProvider extends AbstractOAuth2ServiceProvider<SoundCloud>{
 
-
+	private String clientId;
 	
 	public SoundCloudServiceProvider(String clientId, String clientSecret) {
 		super(new SoundCloudOAuth2Template(clientId, clientSecret));
@@ -18,7 +18,7 @@ public class SoundCloudServiceProvider extends AbstractOAuth2ServiceProvider<Sou
 
 	@Override
 	public SoundCloud getApi(String accessToken) {
-		return new SoundCloudTemplate(accessToken);
+		return new SoundCloudTemplate(clientId,accessToken);
 	}
 
 }

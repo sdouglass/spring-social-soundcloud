@@ -10,9 +10,9 @@ import org.springframework.web.client.RestTemplate;
 
 public abstract class AbstractUserTemplate extends AbstractSoundCloudResourceOperations implements UserOperations {
 	
-	public AbstractUserTemplate(RestTemplate restTemplate,
-			boolean isAuthorizedForUser) {
-		super(restTemplate, isAuthorizedForUser);
+	public AbstractUserTemplate(String clientId,RestTemplate restTemplate,
+			boolean isAuthorizedForUser,boolean appendClientIdIfNotAuthorized) {
+		super(clientId,restTemplate, isAuthorizedForUser,appendClientIdIfNotAuthorized);
 	}
 	protected abstract String getUsersResourcePrefix();
 	

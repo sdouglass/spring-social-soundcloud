@@ -6,10 +6,13 @@ public abstract class AbstractSoundCloudOperations {
 	
 	protected final RestTemplate restTemplate;
 	protected final boolean isAuthorizedForUser;
+	protected final String clientId;
 
-	public AbstractSoundCloudOperations(RestTemplate restTemplate, boolean isAuthorizedForUser) {
+	
+	public AbstractSoundCloudOperations(String clientId,RestTemplate restTemplate, boolean isAuthorizedForUser) {
 		this.restTemplate = restTemplate;
 		this.isAuthorizedForUser = isAuthorizedForUser;
+		this.clientId = clientId;
 		}
 	
 	protected String getApiBaseUrl()
@@ -21,3 +24,4 @@ public abstract class AbstractSoundCloudOperations {
 	
 	
 }
+	

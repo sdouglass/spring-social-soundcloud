@@ -17,7 +17,7 @@ abstract class TrackMixin {
 	@JsonCreator
 	TrackMixin(
 			@JsonProperty("permalink_url") String permalinkUrl, 
-			@JsonProperty("title") String title) {} 
+			@JsonProperty("title") String title,@JsonProperty("id") String id) {} 
 	
 	
 }

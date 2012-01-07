@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 public class MeTemplate extends AbstractUserTemplate implements MeOperations {
 
 	public MeTemplate(RestTemplate restTemplate, boolean isAuthorizedForUser) {
-		super(restTemplate, isAuthorizedForUser);
+		super(null,restTemplate, isAuthorizedForUser,false);
 	}
 
 	@Override

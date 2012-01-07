@@ -13,6 +13,6 @@ public interface SoundCloud {
 	public MeOperations meOperations();
 	public UsersOperations usersOperations();
 	public ResolveOperations resolveOperations();
-
+	public TracksOperations tracksOperations();
 
 }

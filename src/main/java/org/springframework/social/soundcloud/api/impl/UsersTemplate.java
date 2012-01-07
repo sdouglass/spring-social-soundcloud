@@ -8,20 +8,20 @@ import org.springframework.web.client.RestTemplate;
 
 public class UsersTemplate extends AbstractSoundCloudOperations implements UsersOperations {
 
-	public UsersTemplate(RestTemplate restTemplate, boolean isAuthorizedForUser) {
-		super(restTemplate, isAuthorizedForUser);
+	public UsersTemplate(String clientId,RestTemplate restTemplate, boolean isAuthorizedForUser) {
+		super(clientId,restTemplate, isAuthorizedForUser);
 	}
 
 	@Override
 	public UserOperations userOperations(long userId) {
-		return new UserTemplate(restTemplate,userId,isAuthorizedForUser);
+		return new UserTemplate(clientId,restTemplate,userId,isAuthorizedForUser);
 	}
 	
 	@Override
 	public UserOperations userOperations(String username) {
-		ResolveOperations resolveOperations = new ResolveTemplate(restTemplate,isAuthorizedForUser);
+		ResolveOperations resolveOperations = new ResolveTemplate(clientId,restTemplate,isAuthorizedForUser);
 		SoundCloudProfile soundCloudProfile = resolveOperations.resolveUserProfile(username);
-		return new UserTemplate(restTemplate,Long.parseLong(soundCloudProfile.getId()),isAuthorizedForUser);
+		return new UserTemplate(clientId,restTemplate,Long.parseLong(soundCloudProfile.getId()),isAuthorizedForUser);
 	}
 
 
