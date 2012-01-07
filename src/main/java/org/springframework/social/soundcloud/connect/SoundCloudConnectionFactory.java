@@ -10,7 +10,11 @@ import org.springframework.social.soundcloud.api.SoundCloud;
 public class SoundCloudConnectionFactory extends OAuth2ConnectionFactory<SoundCloud> {
 
 	public SoundCloudConnectionFactory(String clientId, String clientSecret) {
-		super("soundcloud", new SoundCloudServiceProvider(clientId, clientSecret), new SoundCloudAdapter());
+		this(clientId,clientSecret,null);
+	}
+	
+	public SoundCloudConnectionFactory(String clientId, String clientSecret,String redirectUri) {
+		super("soundcloud", new SoundCloudServiceProvider(clientId, clientSecret,redirectUri), new SoundCloudAdapter());
 	}
 
 }

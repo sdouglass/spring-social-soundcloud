@@ -13,7 +13,12 @@ public class SoundCloudServiceProvider extends AbstractOAuth2ServiceProvider<Sou
 	private String clientId;
 	
 	public SoundCloudServiceProvider(String clientId, String clientSecret) {
-		super(new SoundCloudOAuth2Template(clientId, clientSecret));
+		this(clientId,clientSecret,null);
+	}
+	
+
+	public SoundCloudServiceProvider(String clientId, String clientSecret,String redirectUri) {
+		super(new SoundCloudOAuth2Template(clientId, clientSecret,redirectUri));
 		}
 
 	@Override
