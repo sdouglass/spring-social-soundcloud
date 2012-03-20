@@ -1,5 +1,6 @@
 package org.springframework.social.soundcloud.api.impl;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.client.RestTemplate;
 
 public abstract class AbstractSoundCloudResourceOperations extends AbstractSoundCloudOperations{
@@ -14,14 +15,27 @@ public abstract class AbstractSoundCloudResourceOperations extends AbstractSound
 	
 	protected abstract String getApiResourceBaseUrl();
 	
-	
 	protected String getApiResourceUrl(String resourcePath)
+	{
+		return getApiResourceUrl(resourcePath,null);
+	}
+	
+	private String getQuerySeparator(String existingResourceUrl)
+	{
+		return existingResourceUrl.indexOf("?") == -1 ? "?" : "&";
+
+	}
+	
+	protected String getApiResourceUrl(String resourcePath,Pageable pageable)
 	{
 		String resourceUrl = getApiResourceBaseUrl() + resourcePath;
 		if (appendClientIfIfNotAuthorized && !isAuthorizedForUser && clientId != null)
 		{
-			String querySeparator = resourceUrl.indexOf("?") == -1 ? "?" : "&";
-			resourceUrl = resourceUrl + querySeparator + "client_id=" + clientId;
+			resourceUrl = resourceUrl + getQuerySeparator(resourceUrl) + "client_id=" + clientId;
+		}
+		if (pageable != null)
+		{
+			resourceUrl = resourceUrl + getQuerySeparator(resourceUrl)  + "limit=" + pageable.getPageSize() + "&offset=" + pageable.getOffset();
 		}
 		return resourceUrl;
 	}

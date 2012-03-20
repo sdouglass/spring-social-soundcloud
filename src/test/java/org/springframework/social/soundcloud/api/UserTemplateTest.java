@@ -14,6 +14,8 @@ import static org.springframework.social.test.client.RequestMatchers.header;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 
 public class UserTemplateTest extends AbstractSoundCloudApiTest {
@@ -21,6 +23,9 @@ public class UserTemplateTest extends AbstractSoundCloudApiTest {
 	@Test
 	public void getFavorites() {
 
+		
+		
+		
 		mockUnauthorizedServer
 				.expect(requestTo("https://api.soundcloud.com/resolve?url=http://soundcloud.com/mattslip&client_id=someApiKey"))
 				.andExpect(method(GET))
@@ -29,13 +34,23 @@ public class UserTemplateTest extends AbstractSoundCloudApiTest {
 								responseHeaders));
 		
 		mockUnauthorizedServer
+		.expect(requestTo("https://api.soundcloud.com/users/3510549?client_id=someApiKey"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile1"),
+						responseHeaders));
+		
+		mockUnauthorizedServer
 		.expect(requestTo("https://api.soundcloud.com/users/3510549/favorites?client_id=someApiKey"))
 		.andExpect(method(GET))
 		.andRespond(
 				withResponse(jsonResource("testdata/favorites"),
 						responseHeaders));
 
-		List<Track> tracks = unauthorizedSoundCloud.usersOperations().userOperations("mattslip").getFavorites();
+		Page<Track> tracksPage = unauthorizedSoundCloud.usersOperations().userOperations("mattslip").getFavorites();
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(56,tracksPage.getTotalElements());
+		List<Track> tracks = tracksPage.getContent();
 		assertNotNull(tracks);
 		assertEquals(50,tracks.size());
 		Track firstTrack = tracks.get(0);
@@ -49,14 +64,28 @@ public class UserTemplateTest extends AbstractSoundCloudApiTest {
 	@Test
 	public void getFavoritesByUserId() {
 
+		
+		mockUnauthorizedServer
+		.expect(requestTo("https://api.soundcloud.com/users/3510549?client_id=someApiKey"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile1"),
+						responseHeaders));
+		
+		
+		
 		mockUnauthorizedServer
 		.expect(requestTo("https://api.soundcloud.com/users/3510549/favorites?client_id=someApiKey"))
 		.andExpect(method(GET))
 		.andRespond(
 				withResponse(jsonResource("testdata/favorites"),
 						responseHeaders));
+	
 
-		List<Track> tracks = unauthorizedSoundCloud.usersOperations().userOperations(3510549).getFavorites();
+		Page<Track> tracksPage = unauthorizedSoundCloud.usersOperations().userOperations(3510549).getFavorites();
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(56,tracksPage.getTotalElements());
+		List<Track> tracks = tracksPage.getContent();
 		assertNotNull(tracks);
 		assertEquals(50,tracks.size());
 		Track firstTrack = tracks.get(0);
@@ -78,14 +107,26 @@ public class UserTemplateTest extends AbstractSoundCloudApiTest {
 								responseHeaders));
 		
 		mockUnauthorizedServer
+		.expect(requestTo("https://api.soundcloud.com/users/3510549?client_id=someApiKey"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile1"),
+						responseHeaders));
+		
+		
+		
+		mockUnauthorizedServer
 		.expect(requestTo("https://api.soundcloud.com/users/3510549/tracks?client_id=someApiKey"))
 		.andExpect(method(GET))
 		.andRespond(
 				withResponse(jsonResource("testdata/tracks"),
 						responseHeaders));
 
-		List<Track> tracks = unauthorizedSoundCloud.usersOperations().userOperations("mattslip").getTracks();
-	
+		Page<Track> tracksPage = unauthorizedSoundCloud.usersOperations().userOperations("mattslip").getTracks();
+		List<Track> tracks = tracksPage.getContent();
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(50,tracksPage.getTotalElements());
+		
 		assertNotNull(tracks);
 		assertEquals(50,tracks.size());
 		Track firstTrack = tracks.get(0);
@@ -99,13 +140,26 @@ public class UserTemplateTest extends AbstractSoundCloudApiTest {
 	public void getTracksByUserId() {
 
 		mockUnauthorizedServer
+		.expect(requestTo("https://api.soundcloud.com/users/3510549?client_id=someApiKey"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile1"),
+						responseHeaders));
+		
+		
+		
+		mockUnauthorizedServer
 		.expect(requestTo("https://api.soundcloud.com/users/3510549/tracks?client_id=someApiKey"))
 		.andExpect(method(GET))
 		.andRespond(
 				withResponse(jsonResource("testdata/tracks"),
 						responseHeaders));
+	
 
-		List<Track> tracks = unauthorizedSoundCloud.usersOperations().userOperations(3510549).getTracks();
+		Page<Track> tracksPage = unauthorizedSoundCloud.usersOperations().userOperations(3510549).getTracks();
+		List<Track> tracks = tracksPage.getContent();
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(50,tracksPage.getTotalElements());
 	
 		assertNotNull(tracks);
 		assertEquals(50,tracks.size());

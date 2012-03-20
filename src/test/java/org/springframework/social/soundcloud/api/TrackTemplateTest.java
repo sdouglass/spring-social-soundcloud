@@ -10,6 +10,7 @@ import static org.springframework.social.test.client.ResponseCreators.withRespon
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.data.domain.Page;
 
 public class TrackTemplateTest extends AbstractSoundCloudApiTest {
 
@@ -24,7 +25,11 @@ public class TrackTemplateTest extends AbstractSoundCloudApiTest {
 				withResponse(jsonResource("testdata/searchresults"),
 						responseHeaders));
 
-		List<Track> tracks = unauthorizedSoundCloud.tracksOperations().search("monsieur adi");
+		Page<Track> tracksPage = unauthorizedSoundCloud.tracksOperations().search("monsieur adi");
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(46,tracksPage.getNumberOfElements());
+
+		List<Track> tracks = tracksPage.getContent();
 		assertNotNull(tracks);
 		assertEquals(46,tracks.size());
 		Track firstTrack = tracks.get(0);
@@ -45,7 +50,10 @@ public class TrackTemplateTest extends AbstractSoundCloudApiTest {
 				withResponse(jsonResource("testdata/emptysearchresults"),
 						responseHeaders));
 
-		List<Track> tracks = unauthorizedSoundCloud.tracksOperations().search("monsieur adi");
+		Page<Track> tracksPage = unauthorizedSoundCloud.tracksOperations().search("monsieur adi");
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(0,tracksPage.getNumberOfElements());
+		List<Track> tracks = tracksPage.getContent();
 		assertNotNull(tracks);
 		assertEquals(0,tracks.size());
 	}

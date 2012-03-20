@@ -21,8 +21,26 @@ public class SoundCloudProfile implements Serializable {
 	private String fullName;
 	private String uri;
 	private String city;
+	private int favoritesCount;
+	private int trackCount;
 	
 	
+	public int getTrackCount() {
+		return trackCount;
+	}
+
+	public void setTrackCount(int trackCount) {
+		this.trackCount = trackCount;
+	}
+
+	public int getFavoritesCount() {
+		return favoritesCount;
+	}
+
+	public void setFavoritesCount(int favoritesCount) {
+		this.favoritesCount = favoritesCount;
+	}
+
 	public SoundCloudProfile()
 	{
 		

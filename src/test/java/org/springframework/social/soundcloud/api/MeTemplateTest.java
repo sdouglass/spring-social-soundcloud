@@ -14,12 +14,22 @@ import static org.springframework.social.test.client.RequestMatchers.header;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.data.domain.Page;
 
 
 public class MeTemplateTest extends AbstractSoundCloudApiTest {
 
 	@Test
 	public void getFavorites() {
+		
+		mockServer
+		.expect(requestTo("https://api.soundcloud.com/me"))
+		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile1"),
+						responseHeaders));
+		
 		
 		mockServer
 		.expect(requestTo("https://api.soundcloud.com/me/favorites"))
@@ -29,7 +39,10 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 				withResponse(jsonResource("testdata/favorites"),
 						responseHeaders));
 
-		List<Track> tracks = soundCloud.meOperations().getFavorites();
+		Page<Track> tracksPage = soundCloud.meOperations().getFavorites();
+		assertEquals(0,tracksPage.getNumber());
+		assertEquals(56,tracksPage.getTotalElements());
+		List<Track> tracks = tracksPage.getContent();
 		assertNotNull(tracks);
 		assertEquals(50,tracks.size());
 		Track firstTrack = tracks.get(0);
@@ -44,6 +57,14 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 
 		
 		mockServer
+		.expect(requestTo("https://api.soundcloud.com/me"))
+		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile1"),
+						responseHeaders));
+		
+		mockServer
 		.expect(requestTo("https://api.soundcloud.com/me/tracks"))
 		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
 		.andExpect(method(GET))
@@ -51,7 +72,8 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 				withResponse(jsonResource("testdata/tracks"),
 						responseHeaders));
 
-		List<Track> tracks = soundCloud.meOperations().getTracks();
+		Page<Track> tracksPage = soundCloud.meOperations().getTracks();
+		List<Track> tracks= tracksPage.getContent();
 
 		assertNotNull(tracks);
 		assertEquals(50,tracks.size());

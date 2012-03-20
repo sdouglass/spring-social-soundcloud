@@ -25,4 +25,10 @@ abstract class SoundCloudProfileMixin {
 			@JsonProperty("city") String city) {} 
 	
 	
+	@JsonProperty("public_favorites_count")
+	void setFavoritesCount(int favoritesCount) {}
+	
+	@JsonProperty("track_count")
+	void setTrackCount(int trackCount) {}
+	
 }
