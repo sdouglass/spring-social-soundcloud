@@ -101,7 +101,12 @@ class SoundCloudErrorHandler extends DefaultResponseErrorHandler {
 		} else if (statusCode == HttpStatus.BAD_REQUEST) {
 				throw new ResourceNotFoundException(message);
 
-		} else if (statusCode == HttpStatus.UNAUTHORIZED) {
+		}
+		else if (statusCode == HttpStatus.NOT_FOUND) {
+			throw new ResourceNotFoundException(message);
+
+		}
+		else if (statusCode == HttpStatus.UNAUTHORIZED) {
 			if (isMessageStartsWithText(messages,"invalid_token")) {
 				handleInvalidAccessToken(message);
 			}
