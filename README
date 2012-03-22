@@ -5,8 +5,7 @@ Use Cases:
 To make calls to the SoundCloud Api on behalf of a user (for example favoriting a track), the SoundCloud user must
 give their permission to your application.  
 
-The authentication dance required (where the user is directed to a permission dialog on SoundCloud and then 
-redirected back to your applicaiton) is handled perfectly by the Spring Social framework.  
+The authentication dance required (where the user is directed to a permission dialog on SoundCloud and then redirected back to your application) is handled perfectly by the Spring Social framework.  
 
 To use this functionality, create a Spring Social-enabled webapp and simply register the SoundCloudConnectionFactory
 with the ConnectionFactoryRegistry, eg:
