@@ -26,31 +26,31 @@ user's connection:
 
   	Connection<SoundCloud> soundcloudConnection = connectionRepository.findPrimaryConnection(SoundCloud.class);
 
-    SoundCloud authenticatedSoundCloudApi = soundcloud.getApi();
+    	SoundCloud authenticatedSoundCloudApi = soundcloud.getApi();
     
   	Page<Track> tracks = authenticatedSoundCloudApi.tracksOperations().search("monsieur adi dancing with the dj");
     
-    Track firstResult = tracks.getNumberOfElements() > 0 ? tracks.getContent().get(0) : null;
+    	Track firstResult = tracks.getNumberOfElements() > 0 ? tracks.getContent().get(0) : null;
     
-    if (firstResult != null)
-    {
-        authenticatedSoundCloudApi.meOperations().favoriteTrack(firstResult.getId());
-    }
+    	if (firstResult != null)
+    	{
+        	authenticatedSoundCloudApi.meOperations().favoriteTrack(firstResult.getId());
+    	}
 
 As mentioned above the Spring Social framework here is managing the authentication dance - behind the scenes Spring
 Social has obtained a SoundCloud session key which is linked to the user's authorisation.  Outside of a Spring-Social
 enabled webapp, the authenticated API client could be constructed as follows.
 
-    SoundCloud authenticatedSoundCloudApi = new SoundCloudTemplate("myApiKey","mySessionKey");
+    	SoundCloud authenticatedSoundCloudApi = new SoundCloudTemplate("myApiKey","mySessionKey");
 
 To make unauthenticated calls (ie. those which do not require an end user's permission) - for example searching for
 tracks or viewing a user's favorites, this module can be used standalone outside of a Spring-Social-enabled webapp.
 
 To use the API in this way, simply create a new SoundCloudTemplate instance, passing in your applications API key:
 
-    SoundCloud unauthenticatedSoundCloudApi = new SoundCloudTemplate("myApiKey");
+    	SoundCloud unauthenticatedSoundCloudApi = new SoundCloudTemplate("myApiKey");
 
-    Page<Track> tracks = unauthenticatedSoundCloudApi.usersOperations().userOperations("mattslip").getFavorites();
+    	Page<Track> tracks = unauthenticatedSoundCloudApi.usersOperations().userOperations("mattslip").getFavorites();
 
 Usage:
 
