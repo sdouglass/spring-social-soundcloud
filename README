@@ -36,10 +36,11 @@ user's connection:
     
     	Track firstResult = tracks.getNumberOfElements() > 0 ? tracks.getContent().get(0) : null;
     
-    	if (firstResult != null)
-    	{
-        	authenticatedSoundCloudApi.meOperations().favoriteTrack(firstResult.getId());
-    	}
+    	if (firstResult != null) {
+        
+	authenticatedSoundCloudApi.meOperations().favoriteTrack(firstResult.getId());
+    	
+	}
 
 As mentioned above the Spring Social framework here is managing the authentication dance - behind the scenes Spring
 Social has obtained a SoundCloud session key which is linked to the user's authorisation.  Outside of a Spring-Social
