@@ -68,7 +68,7 @@ Then simply add the following dependency to your project's pom:
 
       <dependency>
          <groupId>org.springframework.social<groupId>
-         <artifactId>spring-social-lastfm</artifactId>
+         <artifactId>spring-social-soundcloud</artifactId>
          <version>1.0.1-SNAPSHOT</version>
      </dependency>
 
