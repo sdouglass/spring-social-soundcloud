@@ -12,23 +12,27 @@ To use this functionality, create a Spring Social-enabled webapp and simply regi
 with the ConnectionFactoryRegistry, eg:
 
 @Bean
-  @Scope(value="singleton", proxyMode=ScopedProxyMode.INTERFACES) 
-	public ConnectionFactoryLocator connectionFactoryLocator() {
-		ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
-		registry.addConnectionFactory(new SoundCloudConnectionFactory(environment.getProperty("soundCloud.consumerKey"),
-				environment.getProperty("soundCloud.consumerSecret")));
-				return registry;
-	}
+@Scope(value="singleton", proxyMode=ScopedProxyMode.INTERFACES) 
+public ConnectionFactoryLocator connectionFactoryLocator() {
+	ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+
+		registry.addConnectionFactory(new SoundCloudConnectionFactory(
+		environment.getProperty("soundCloud.consumerKey"),
+		environment.getProperty("soundCloud.consumerSecret")));
+		return registry;
+}
 
 Once the user has given permission to your Spring Social webapp to use their SoundCloud account ( see 
 http://www.springsource.org/spring-social for more details ), an authenticated API client can be obtained from the
 user's connection:
 
-  	Connection<SoundCloud> soundcloudConnection = connectionRepository.findPrimaryConnection(SoundCloud.class);
+  	Connection<SoundCloud> soundcloudConnection = 
+		connectionRepository.findPrimaryConnection(SoundCloud.class);
 
     	SoundCloud authenticatedSoundCloudApi = soundcloud.getApi();
     
-  	Page<Track> tracks = authenticatedSoundCloudApi.tracksOperations().search("monsieur adi dancing with the dj");
+  	Page<Track> tracks = 
+	authenticatedSoundCloudApi.tracksOperations().search("monsieur adi dancing with the dj");
     
     	Track firstResult = tracks.getNumberOfElements() > 0 ? tracks.getContent().get(0) : null;
     
