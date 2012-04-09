@@ -31,5 +31,10 @@ public class Track {
 		this.permalinkUrl = permalinkUrl;
 		this.id = id;
 	}
+	
+	public String getStreamUrl()
+	{
+		return "http://api.soundcloud.com/tracks/" + getId() + "/stream"; 
+	}
 
 }
