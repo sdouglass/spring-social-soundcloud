@@ -1,0 +1,81 @@
+SoundCloud API Java Client and plugin for the Spring Social Framework ( http://www.springsource.org/spring-social )
+
+Use Cases:
+
+To make calls to the SoundCloud Api on behalf of a user (for example favoriting a track), the SoundCloud user must
+give their permission to your application.  
+
+The authentication dance required (where the user is directed to a permission dialog on SoundCloud and then redirected 
+back to your application) is handled perfectly by the Spring Social framework.  
+
+To use this functionality, create a Spring Social-enabled webapp and simply register the SoundCloudConnectionFactory
+with the ConnectionFactoryRegistry, eg:
+
+@Bean
+@Scope(value="singleton", proxyMode=ScopedProxyMode.INTERFACES) 
+public ConnectionFactoryLocator connectionFactoryLocator() {
+	ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+
+		registry.addConnectionFactory(new SoundCloudConnectionFactory(
+		environment.getProperty("soundCloud.consumerKey"),
+		environment.getProperty("soundCloud.consumerSecret")));
+		return registry;
+}
+
+Once the user has given permission to your Spring Social webapp to use their SoundCloud account ( see 
+http://www.springsource.org/spring-social for more details ), an authenticated API client can be obtained from the
+user's connection:
+
+  	Connection<SoundCloud> soundcloudConnection = 
+		connectionRepository.findPrimaryConnection(SoundCloud.class);
+
+    	SoundCloud authenticatedSoundCloudApi = soundcloud.getApi();
+    
+  	Page<Track> tracks = 
+	authenticatedSoundCloudApi.tracksOperations().search("monsieur adi dancing with the dj");
+    
+    	Track firstResult = tracks.getNumberOfElements() > 0 ? tracks.getContent().get(0) : null;
+    
+    	if (firstResult != null) {
+        
+	authenticatedSoundCloudApi.meOperations().favoriteTrack(firstResult.getId());
+    	
+	}
+
+As mentioned above the Spring Social framework here is managing the authentication dance - behind the scenes Spring
+Social has obtained a SoundCloud session key which is linked to the user's authorisation.  Outside of a Spring-Social
+enabled webapp, the authenticated API client could be constructed as follows.
+
+    	SoundCloud authenticatedSoundCloudApi = new SoundCloudTemplate("myApiKey","mySessionKey");
+
+To make unauthenticated calls (ie. those which do not require an end user's permission) - for example searching for
+tracks or viewing a user's favorites, this module can be used standalone outside of a Spring-Social-enabled webapp.
+
+To use the API in this way, simply create a new SoundCloudTemplate instance, passing in your applications API key:
+
+    	SoundCloud unauthenticatedSoundCloudApi = new SoundCloudTemplate("myApiKey");
+
+    	Page<Track> tracks = unauthenticatedSoundCloudApi.usersOperations().userOperations("mattslip").getFavorites();
+
+Usage:
+
+To use this module, either checkout the project, build and install locally ("mvn install" from the base directory of
+your checkout) or add the following repository to your project's pom:
+
+<repositories>
+     <repository>
+        <id>opensourceagility-snapshots</id>
+        <url>http://repo.opensourceagility.com/snapshots</url>
+    </repository>
+</repositories>
+
+Then simply add the following dependency to your project's pom:
+
+      <dependency>
+         <groupId>org.springframework.social<groupId>
+         <artifactId>spring-social-soundcloud</artifactId>
+         <version>1.0.1-SNAPSHOT</version>
+     </dependency>
+
+
+    
