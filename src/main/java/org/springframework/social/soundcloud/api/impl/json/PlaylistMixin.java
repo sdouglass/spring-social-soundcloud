@@ -15,15 +15,29 @@
  */
 package org.springframework.social.soundcloud.api.impl.json;
 
-import java.util.ArrayList;
 
+
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.social.soundcloud.api.Track;
 
-public class TrackList extends ArrayList<Track> {
+/**
+ * Annotated mixin to add Jackson annotations to Track. 
+ * @author Michael Lavelle
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+abstract class PlaylistMixin {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+	
+	@JsonCreator
+	PlaylistMixin(
+			@JsonProperty("permalink_url") String permalinkUrl, 
+			@JsonProperty("title") String title,@JsonProperty("id") String id) {} 
+	
+	@JsonProperty("tracks")
+	void setTracks(List<Track> tracks) {}
+	
 }

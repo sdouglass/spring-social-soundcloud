@@ -1,15 +1,28 @@
+/*
+ * Copyright 2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.springframework.social.soundcloud.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
-
+import static org.springframework.social.test.client.RequestMatchers.header;
 import static org.springframework.social.test.client.RequestMatchers.method;
 import static org.springframework.social.test.client.RequestMatchers.requestTo;
 import static org.springframework.social.test.client.ResponseCreators.withResponse;
-import static org.springframework.social.test.client.RequestMatchers.header;
-
 
 import java.util.List;
 
@@ -27,7 +40,7 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
 		.andExpect(method(GET))
 		.andRespond(
-				withResponse(jsonResource("testdata/userprofile1"),
+				withResponse(jsonResource("testdata/userprofile"),
 						responseHeaders));
 		
 		
@@ -61,7 +74,7 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
 		.andExpect(method(GET))
 		.andRespond(
-				withResponse(jsonResource("testdata/userprofile1"),
+				withResponse(jsonResource("testdata/userprofile"),
 						responseHeaders));
 		
 		mockServer
@@ -94,7 +107,7 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
 		.andExpect(method(GET))
 		.andRespond(
-				withResponse(jsonResource("testdata/userprofile1"),
+				withResponse(jsonResource("testdata/userprofile"),
 						responseHeaders));
 
 		SoundCloudProfile userProfile = soundCloud.meOperations().getUserProfile();
@@ -118,12 +131,65 @@ public class MeTemplateTest extends AbstractSoundCloudApiTest {
 		.andExpect(header("Authorization","OAuth " + ACCESS_TOKEN))
 		.andExpect(method(PUT))
 		.andRespond(
-				withResponse(jsonResource("testdata/userprofile1"),
+				withResponse(jsonResource("testdata/userprofile"),
 						responseHeaders));
 
 		soundCloud.meOperations().favoriteTrack(12345);
 	
 	}
+	
+	
+	
+	@Test
+	public void getPlaylists()
+	{
+		mockServer
+		.expect(requestTo("https://api.soundcloud.com/me"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/userprofile"),
+						responseHeaders));
+		
+		
+		
+		mockServer
+		.expect(requestTo("https://api.soundcloud.com/me/playlists"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/playlists"),
+						responseHeaders));
+
+		Page<Playlist> playlists = soundCloud.meOperations().getPlaylists();
+		assertEquals(1,playlists.getNumberOfElements());
+		Playlist playlist = playlists.getContent().get(0);
+		assertPlaylistData(playlist);
+
+	}
+	
+	@Test
+	public void getActivities()
+	{
+		
+		mockServer
+		.expect(requestTo("https://api.soundcloud.com/me/activities"))
+		.andExpect(method(GET))
+		.andRespond(
+				withResponse(jsonResource("testdata/activities"),
+						responseHeaders));
+
+		Page<Activity> activities = soundCloud.meOperations().getActivities();
+		assertEquals(50,activities.getNumberOfElements());
+		Activity activity = activities.getContent().get(0);
+		assertEquals("favoriting",activity.getType());
+		Track track = activity.getOrigin().getTrack();
+		assertEquals("49581078",track.getId());
+		assertEquals("Salon Acapulco - Atardecer",track.getTitle());
+		assertEquals("http://soundcloud.com/salonacapulco/salon-acapulco-atardecer",track.getPermalinkUrl());
+
+
+
+	}
+	
 	
 
 	

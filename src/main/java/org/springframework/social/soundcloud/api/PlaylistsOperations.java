@@ -15,12 +15,15 @@
  */
 package org.springframework.social.soundcloud.api;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+public interface PlaylistsOperations {
 
-public interface TracksOperations {
 	
-	public Page<Track> search(String query);
-	public Page<Track> search(String query,Pageable pageable);
+	public Playlist updatePlaylist(String id,PlaylistUpdate playlist);
+	public void deletePlaylist(String id);
+	public Playlist getPlaylist(String id);
 
+
+	public Playlist createPlaylist(PlaylistUpdate playlist);
+
+	
 }

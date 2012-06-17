@@ -13,17 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.soundcloud.api.impl.json;
+package org.springframework.social.soundcloud.api.impl.xml;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.social.soundcloud.api.Track;
+import org.springframework.social.soundcloud.api.TrackReference;
 
-public class TrackList extends ArrayList<Track> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class TrackArray 
+{
+	
+	private String type = "array";
+	
+	private List<TrackReference> tracks;
+	
 
+	public TrackArray(List<TrackReference> tracks)
+	{
+		this.tracks = new ArrayList<TrackReference>(tracks);
+	}
+
+	public List<TrackReference> getTrackReferences() {
+		return tracks;
+	}
+
+	public void setTracks(List<TrackReference> tracks) {
+		this.tracks = tracks;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	
+	
+	
 }

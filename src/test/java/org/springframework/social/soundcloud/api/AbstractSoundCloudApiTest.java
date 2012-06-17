@@ -15,6 +15,8 @@
  */
 package org.springframework.social.soundcloud.api;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -51,6 +53,24 @@ public abstract class AbstractSoundCloudApiTest {
 
 	protected Resource jsonResource(String filename) {
 		return new ClassPathResource(filename + ".json", getClass());
+	}
+	
+	protected Resource xmlResource(String filename) {
+		return new ClassPathResource(filename + ".xml", getClass());
+	}
+	
+	protected void assertPlaylistData(Playlist playlist)
+	{
+		assertEquals("My Test Playlist",playlist.getTitle());
+		assertEquals("http://soundcloud.com/michaellavelle/sets/my-test-playlist",playlist.getPermalinkUrl());
+		assertEquals(1,playlist.getTracks().size());
+		Track track = playlist.getTracks().get(0);
+		assertEquals("46562011",track.getId());
+		
+		assertEquals("A.N.D.Y. & Vicente : Traffic",track.getTitle());
+
+		assertEquals("http://soundcloud.com/a-n-d-y-music/a-n-d-y-vicente-traffic",track.getPermalinkUrl());
+		assertEquals("http://api.soundcloud.com/tracks/46562011/stream",track.getStreamUrl());
 	}
 
 }

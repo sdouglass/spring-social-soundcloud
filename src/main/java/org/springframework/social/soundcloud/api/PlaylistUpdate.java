@@ -1,3 +1,7 @@
+package org.springframework.social.soundcloud.api;
+
+import java.util.List;
+
 /*
  * Copyright 2011 the original author or authors.
  *
@@ -13,29 +17,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.soundcloud.api;
+public class PlaylistUpdate  {
 
-public class Track extends TrackReference {
-	
 	private String title;
-	
-	
-	public String getTitle() {
-		return title;
-	}
+	private List<TrackReference> trackReferences;
+
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-	public Track(String permalinkUrl,String title,String id)
-	{
-		super(id,permalinkUrl);
-		this.title = title;
+
+	public String getTitle() {
+		return title;
 	}
 	
-	public String getStreamUrl()
+	public PlaylistUpdate()
 	{
-		return "http://api.soundcloud.com/tracks/" + getId() + "/stream"; 
+		
 	}
+	
+	public PlaylistUpdate(PlaylistUpdate playlistUpdate)
+	{
+		setTitle(playlistUpdate.getTitle());
+		setTrackReferences(playlistUpdate.getTrackReferences());
+	}
+	
+	public void setTrackReferences(List<TrackReference> trackReferences)
+	{
+		this.trackReferences = trackReferences;
+	}
+	public  List<TrackReference> getTrackReferences()
+	{
+		return trackReferences;
+	}
+
 
 }

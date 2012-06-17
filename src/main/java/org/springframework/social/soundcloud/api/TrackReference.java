@@ -15,12 +15,41 @@
  */
 package org.springframework.social.soundcloud.api;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+public class TrackReference {
 
-public interface TracksOperations {
+	private String id;
+	private String permalinkUrl;
 	
-	public Page<Track> search(String query);
-	public Page<Track> search(String query,Pageable pageable);
-
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPermalinkUrl() {
+		return permalinkUrl;
+	}
+	public void setPermalinkUrl(String permalinkUrl) {
+		this.permalinkUrl = permalinkUrl;
+	}
+	
+	public TrackReference(String id,String permalinkUrl)
+	{
+		this.id = id;
+		this.permalinkUrl = permalinkUrl;
+	}
+	
+	public TrackReference(String permalinkUrl)
+	{
+		this.permalinkUrl = permalinkUrl;
+	}
+	
+	public TrackReference(long id)
+	{
+		this.id = new Long(id).toString();
+	}
+	
+	
+	
+	
 }

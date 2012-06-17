@@ -15,15 +15,34 @@
  */
 package org.springframework.social.soundcloud.api.impl.json;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.social.soundcloud.api.Track;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.springframework.social.soundcloud.api.Activity;
 
-public class TrackList extends ArrayList<Track> {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ActivityList  {
+
+	private List<Activity> activities;
+	
+	
+	public List<Activity> getActivities() {
+		return activities;
+	}
+
+
+	@JsonProperty("collection")
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
+	}
+
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
+	
 }

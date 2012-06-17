@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.soundcloud.api;
+package org.springframework.social.soundcloud.api.impl.json;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.ArrayList;
 
-public interface TracksOperations {
-	
-	public Page<Track> search(String query);
-	public Page<Track> search(String query,Pageable pageable);
+import org.springframework.social.soundcloud.api.Playlist;
+
+public class PlaylistList extends ArrayList<Playlist> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 }

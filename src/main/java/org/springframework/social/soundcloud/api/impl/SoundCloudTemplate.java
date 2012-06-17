@@ -1,20 +1,43 @@
+/*
+ * Copyright 2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.springframework.social.soundcloud.api.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
+import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.social.NotAuthorizedException;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.oauth2.OAuth2Version;
 import org.springframework.social.soundcloud.api.MeOperations;
+import org.springframework.social.soundcloud.api.PlaylistsOperations;
 import org.springframework.social.soundcloud.api.ResolveOperations;
 import org.springframework.social.soundcloud.api.SoundCloud;
+import org.springframework.social.soundcloud.api.TrackReference;
 import org.springframework.social.soundcloud.api.TracksOperations;
 import org.springframework.social.soundcloud.api.UsersOperations;
 import org.springframework.social.soundcloud.api.impl.json.SoundCloudModule;
+import org.springframework.social.soundcloud.api.impl.xml.TrackArray;
+import org.springframework.social.soundcloud.api.impl.xml.XmlPlaylistUpdate;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +48,8 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	private UsersOperations usersOperations;
 	private ResolveOperations resolveOperations;
 	private TracksOperations tracksOperations;
+	private PlaylistsOperations playlistsOperations;
+
  
 
 
@@ -69,6 +94,29 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	protected List<HttpMessageConverter<?>> getMessageConverters() {
 	List<HttpMessageConverter<?>> messageConverters = super.getMessageConverters();
 	messageConverters.add(new ByteArrayHttpMessageConverter());
+	XStreamMarshaller marshaller = new XStreamMarshaller();
+	Map<Class<?>,String> implicitCollections = new HashMap<Class<?>,String>();
+	implicitCollections.put(TrackArray.class, "tracks");
+	marshaller.setImplicitCollections(implicitCollections);
+	
+	//marshaller.setConverters(converterMatchers);
+	Map<String,Object> aliases = new HashMap<String,Object>();
+	aliases.put("playlist", XmlPlaylistUpdate.class.getName());
+	//aliases.put("playlist", PlaylistUpdate.class.getName());
+
+	aliases.put("track", TrackReference.class.getName());
+
+	Map<String,Class<?>> useAttributeFor = new HashMap<String,Class<?>>();
+	useAttributeFor.put("type",String.class);
+
+	try {
+		marshaller.setAliases(aliases);
+		marshaller.setUseAttributeFor(useAttributeFor);
+	} catch (ClassNotFoundException e) {
+		throw new RuntimeException(e);
+	}
+
+	messageConverters.add(new MarshallingHttpMessageConverter(marshaller,marshaller));
 	return messageConverters;
 	}
 
@@ -82,6 +130,7 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 		meOperations = new MeTemplate(getRestTemplate(),isAuthorized());
 		resolveOperations = new ResolveTemplate(clientId,getRestTemplate(),isAuthorized());
 		tracksOperations = new TracksTemplate(clientId,getRestTemplate(),isAuthorized());
+		playlistsOperations = new PlaylistsTemplate(clientId,getRestTemplate(),isAuthorized(),resolveOperations);
 
 
 
@@ -134,6 +183,11 @@ public class SoundCloudTemplate extends AbstractOAuth2ApiBinding implements
 	@Override
 	public TracksOperations tracksOperations() {
 		return tracksOperations;
+	}
+	
+	@Override
+	public PlaylistsOperations playlistsOperations() {
+		return playlistsOperations;
 	}
 
 

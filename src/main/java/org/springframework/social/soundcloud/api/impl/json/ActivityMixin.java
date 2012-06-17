@@ -13,14 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.soundcloud.api;
+package org.springframework.social.soundcloud.api.impl.json;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-public interface TracksOperations {
+
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.springframework.social.soundcloud.api.Origin;
+
+/**
+ * Annotated mixin to add Jackson annotations to Track. 
+ * @author Michael Lavelle
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+abstract class ActivityMixin {
+
 	
-	public Page<Track> search(String query);
-	public Page<Track> search(String query,Pageable pageable);
-
+	@JsonCreator
+	ActivityMixin(
+			@JsonProperty("type") String type,@JsonProperty("origin") Origin origin) {} 
+	
+	
 }

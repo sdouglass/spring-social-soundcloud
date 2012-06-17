@@ -15,12 +15,23 @@
  */
 package org.springframework.social.soundcloud.api;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+public class Activity {
 
-public interface TracksOperations {
+	private String type;
+	private Origin origin;
 	
-	public Page<Track> search(String query);
-	public Page<Track> search(String query,Pageable pageable);
 
+	public Activity(String type,Origin origin)
+	{
+		this.type = type;
+		this.origin = origin;
+	}
+	public Origin getOrigin() {
+		return origin;
+	}
+
+	public String getType() {
+		return type;
+	}
+	
 }
