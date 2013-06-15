@@ -37,6 +37,7 @@
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-test</artifactId>
 			<version>${org.springframework.social.version}</version>
+      <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
